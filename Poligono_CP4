@@ -1,0 +1,123 @@
+#include <stdio.h>
+#include <GL/glut.h>
+#include <stdarg.h>
+#include <math.h>
+
+void dibujar();
+void rotar();
+
+double rotate_y = 0;
+double rotate_x = 0;
+
+void dibujar(void)//funcion para dibujar
+{
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+	glLoadIdentity();
+	glRotatef(rotate_x, 1.0, 0.0, 0.0);
+	glRotatef(rotate_y, 0.0, 1.0, 0.0);
+
+	//lado frontal
+	glBegin(GL_POLYGON);
+
+	glColor3f(1.0, 1.0, 0.0); //amarillo
+	glVertex3f(0.5, -0.5, -0.5);
+	glVertex3f(0.5, 0.5, -0.5);
+	glVertex3f(-0.5, 0.5, -0.5);
+	glVertex3f(-0.5, -0.5, -0.5);
+
+	glEnd(); 
+
+
+	//lado trasero
+
+	glBegin(GL_POLYGON);
+	glColor3f(1.0, 1.0, 1.0); //blanco
+	glVertex3f(0.5, -0.5, 0.5);
+	glVertex3f(0.5, 0.5, 0.5);
+	glVertex3f(-0.5, 0.5, 0.5);
+	glVertex3f(-0.5, -0.5, 0.5);
+
+	glEnd();
+
+	//lado derecho
+
+	glBegin(GL_POLYGON);
+	glColor3f(1.0, 0.0, 1.0); //magenta
+	glVertex3f(0.5, -0.5, -0.5);
+	glVertex3f(0.5, 0.5, -0.5);
+	glVertex3f(0.5, 0.5, 0.5);
+	glVertex3f(0.5, -0.5, 0.5);
+
+	glEnd();
+
+
+	//lado Izquierdo
+
+	glBegin(GL_POLYGON);
+	glColor3f(0.0, 1.0, 0.0); //verde
+	glVertex3f(-0.5, -0.5, 0.5);
+	glVertex3f(-0.5, 0.5, 0.5);
+	glVertex3f(-0.5, 0.5, -0.5);
+	glVertex3f(-0.5, -0.5, -0.5);
+
+	glEnd();
+
+
+
+	//lado Superior
+
+	glBegin(GL_POLYGON);
+	glColor3f(0.0, 0.0, 1.0); //azul
+	glVertex3f(0.5, 0.5, 0.5);
+	glVertex3f(0.5, 0.5, -0.5);
+	glVertex3f(-0.5, 0.5, -0.5);
+	glVertex3f(-0.5, 0.5, 0.5);
+
+	glEnd();
+
+	//lado inferior
+
+	glBegin(GL_POLYGON);
+	glColor3f(1.0, 0.0, 0.0); //rojo
+	glVertex3f(0.5, -0.5, -0.5);
+	glVertex3f(0.5, -0.5, 0.5);
+	glVertex3f(-0.5, -0.5, 0.5);
+	glVertex3f(-0.5, -0.5, -0.5);
+	glEnd();
+	glFlush();
+	glutSwapBuffers();
+}
+//funcion para rotar
+void rotar(int key, int x, int y) {
+	//flecha derecha aumenta posicion 5 grados
+	if (key == GLUT_KEY_RIGHT)
+		rotate_y += 5;
+
+
+	//izquierda disminuye 5 grados
+	else if (key == GLUT_KEY_LEFT)
+		rotate_y -= 5;
+
+	else if (key == GLUT_KEY_UP)
+		rotate_x += 5;
+
+	else if (key == GLUT_KEY_DOWN)
+		rotate_x -= 5;
+
+	//actualizacion de visualizacion
+
+	glutPostRedisplay(); 
+}
+
+int main(int argc, char* argv[]) {
+	glutInit(&argc, argv); //inicia el glut
+
+	glutInitDisplayMode(GLUT_DEPTH | GLUT_DOUBLE | GLUT_RGB); //tipo de ventana a usar
+	glutCreateWindow("TrazadoPoligono");//nombre de la ventana
+	glEnable(GL_DEPTH_TEST); //permite el 3d y rotacion, prueba de profundidad
+	glutDisplayFunc(dibujar); //llamamos la funcion dibujar
+	glutSpecialFunc(rotar);//llamamos la funcion para rotar
+	glutMainLoop();
+
+	return 0;
+}
